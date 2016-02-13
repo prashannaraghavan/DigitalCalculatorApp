@@ -67,7 +67,6 @@ typedef enum
             break;
             
         case 11:
-//            self.total -= self.currentNumber;
             self.operatorLabel.text = @"-";
             [self.fullString appendString:@"-"];
             self.historyLabel.text = self.fullString;
@@ -76,7 +75,6 @@ typedef enum
             break;
             
         case 12:
-//            self.total *= self.currentNumber;
             self.operatorLabel.text = @"X";
             [self.fullString appendString:@"X"];
             self.historyLabel.text = self.fullString;
@@ -85,7 +83,6 @@ typedef enum
             break;
             
         case 13:
-//            self.total /= self.currentNumber;
             self.operatorLabel.text = @"/";
             [self.fullString appendString:@"/"];
             self.historyLabel.text = self.fullString;
@@ -113,11 +110,6 @@ typedef enum
             break;
     }
     
-    
-}
-
--(void)calculatePressed
-{
     
 }
 
@@ -216,38 +208,6 @@ typedef enum
     [alert addAction:ok];
 
     [self presentViewController:alert animated:YES completion:nil];
-}
-
-- (IBAction)memoryBtnPressed:(id)sender {
-    
-    UIButton *button = (UIButton *)sender;
-    self.fullString = [NSMutableString stringWithString:@""];
-    
-    switch (button.tag%10) {
-        case 0:
-            self.memory += self.total;
-            self.currentLabel.text = [NSString stringWithFormat:@"%.2f",self.memory];
-            [self.fullString appendString:[NSString stringWithFormat:@"Memory=%f",self.memory]];
-            break;
-            
-        case 1:
-            self.memory -= self.total;
-            self.currentLabel.text = [NSString stringWithFormat:@"%.2f",self.memory];
-            [self.fullString appendString:[NSString stringWithFormat:@"Memory=%f",self.memory]];
-            break;
-            
-        case 2:
-            self.memory = 0.0f;
-            self.currentLabel.text = @"";
-            [self.fullString appendString:[NSString stringWithFormat:@"Memory=%f",self.memory]];
-            
-            break;
-            
-        default:
-            break;
-    }
-    
-    self.historyLabel.text = self.fullString;
 }
 
 
