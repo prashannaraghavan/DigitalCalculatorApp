@@ -27,6 +27,7 @@ typedef enum
 
 @property int currentNumber;
 @property float total;
+@property float memory;
 @property int operand;
 @property OperatorType OperatorType;
 
@@ -43,6 +44,7 @@ typedef enum
     self.currentNumber = 0;
     self.total = 0.0f;
     self.operand = 0;
+    self.memory = 0.0f;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -92,7 +94,7 @@ typedef enum
             break;
             
         case 14:
-            
+
             break;
             
         case 15:
@@ -121,7 +123,7 @@ typedef enum
 
 - (IBAction)operatorPressed:(id)sender
 {
-    if (self.total == 0) {
+    if (self.total == 0 && self.currentNumber!=0) {
         self.total = self.currentNumber;
     }
     
@@ -177,21 +179,75 @@ typedef enum
 }
 
 - (IBAction)clearBtnPressed:(id)sender {
-    self.currentLabel.text = @"0";
+    self.currentLabel.text = @"";
     self.historyLabel.text = @"";
     self.operatorLabel.text = @"";
     self.fullString = [NSMutableString stringWithString:@""];
     self.currentNumber = 0;
     self.total = 0.0f;
-    self.operand = 0;
+    self.operand = -1;
+    self.memory = 0.0f;
 }
 
 - (IBAction)offBtnPressed:(id)sender {
+    UIAlertController * alert=   [UIAlertController
+                                  alertControllerWithTitle:@"Shutdown"
+                                  message:@"You are about to shutdown the app. Press \"Cancel\" to dismiss this alert or \"OK\" to continue this operation."
+                                  preferredStyle:UIAlertControllerStyleAlert];
     
+    UIAlertAction* ok = [UIAlertAction
+                         actionWithTitle:@"OK"
+                         style:UIAlertActionStyleDefault
+                         handler:^(UIAlertAction * action)
+                         {
+                             exit(0);
+                             
+                         }];
+    UIAlertAction* cancel = [UIAlertAction
+                             actionWithTitle:@"Cancel"
+                             style:UIAlertActionStyleDefault
+                             handler:^(UIAlertAction * action)
+                             {
+                                 [alert dismissViewControllerAnimated:YES completion:nil];
+                                 
+                             }];
+    
+    [alert addAction:cancel];
+    [alert addAction:ok];
+
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (IBAction)memoryBtnPressed:(id)sender {
     
+    UIButton *button = (UIButton *)sender;
+    self.fullString = [NSMutableString stringWithString:@""];
+    
+    switch (button.tag%10) {
+        case 0:
+            self.memory += self.total;
+            self.currentLabel.text = [NSString stringWithFormat:@"%.2f",self.memory];
+            [self.fullString appendString:[NSString stringWithFormat:@"Memory=%f",self.memory]];
+            break;
+            
+        case 1:
+            self.memory -= self.total;
+            self.currentLabel.text = [NSString stringWithFormat:@"%.2f",self.memory];
+            [self.fullString appendString:[NSString stringWithFormat:@"Memory=%f",self.memory]];
+            break;
+            
+        case 2:
+            self.memory = 0.0f;
+            self.currentLabel.text = @"";
+            [self.fullString appendString:[NSString stringWithFormat:@"Memory=%f",self.memory]];
+            
+            break;
+            
+        default:
+            break;
+    }
+    
+    self.historyLabel.text = self.fullString;
 }
 
 
